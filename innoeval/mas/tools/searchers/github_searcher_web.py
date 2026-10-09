@@ -4,6 +4,7 @@ GitHub Web Searcher Module for V2
 Searches GitHub repositories using the Serper API via Google search.
 """
 
+from urllib.parse import urlparse
 import logging
 import http.client
 import json
@@ -80,7 +81,10 @@ class GithubWebSearcher:
         Returns:
             List of Source objects
         """
-        conn = http.client.HTTPSConnection("google.serper.dev")
+        serper_url = urlparse(os.getenv("SERPER_BASE_URL", "https://google.serper.dev"))
+        conn = (
+            http.client.HTTPConnection if serper_url.scheme == "http" else http.client.HTTPSConnection
+        )(serper_url.netloc)
         contains_chinese = any("\u4E00" <= char <= "\u9FFF" for char in query)
 
         # Restrict results to GitHub
@@ -103,7 +107,7 @@ class GithubWebSearcher:
         # Retry logic
         for i in range(5):
             try:
-                conn.request("POST", "/search", payload, headers)
+                conn.request("POST", f"{serper_url.path.rstrip('/')}/search", payload, headers)
                 res = conn.getresponse()
                 break
             except Exception as e:

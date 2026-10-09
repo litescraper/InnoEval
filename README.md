@@ -473,3 +473,9 @@ If you find our work helpful, please use the following citations.
 ### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Serper-compatible endpoints
+
+Support any Serper.dev-compatible endpoint (like litescrape.com, serpbase.dev, serpensapi.org, and others)
+
+Set `SERPER_BASE_URL` to your provider's base URL and use its API key with the existing Serper key configuration. If unset, the default remains `https://google.serper.dev`. Trailing slashes and URL path prefixes are supported. Existing provider-specific endpoint overrides, where available, are unchanged.
